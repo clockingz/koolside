@@ -1,6 +1,6 @@
 {
   "name": "koolside",
-  "version": "0.1.14",
+  "version": "0.4.1",
   "description": "디시인사이드 도우미",
   "scripts": {
     "lint": "eslint --fix src/**/*",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toriato/koolside.git"
+    "url": "git+https://github.com/sokcuri/koolside.git"
   },
-  "author": "Sangha Lee <totoriato@gmail.com>",
+  "author": "Sokcuri <sokcuri@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/toriato/koolside/issues"
+    "url": "https://github.com/sokcuri/koolside/issues"
   },
-  "homepage": "https://github.com/toriato/koolside#readme",
+  "homepage": "https://github.com/sokcuri/koolside#readme",
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/plugin-proposal-class-properties": "^7.7.4",

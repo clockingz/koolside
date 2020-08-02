@@ -17,7 +17,7 @@ const checkboxTemplate = createElement(/* html */`
   </td>
 `)
 
-export default function request (opts: string | GM_RequestInfo) {
+export default function request(opts: string | GM_RequestInfo) {
   const options = typeof opts === 'string' ? { url: opts } : opts
 
   options.method = options.method ?? 'GET'
@@ -44,7 +44,7 @@ export default function request (opts: string | GM_RequestInfo) {
  * @param gallery 갤러리 아이디
  * @param post 게시글 번호
  */
-export async function fetchPost (gallery: string, post: number | string) {
+export async function fetchPost(gallery: string, post: number | string) {
   const element = document.querySelector(`tr[data-no="${post}"]`)
 
   // 미리보기 대기 중 클래스 추가하기
@@ -110,7 +110,7 @@ export async function fetchPost (gallery: string, post: number | string) {
   if (notifiaction && rules) {
     const title = element.querySelector('.gall_tit').textContent
     const text = `${title}\n${content.innerHTML}`
-    
+
     for (let rule of rules) {
       if (text.match(rule)) {
         Push.create(title, {
@@ -127,7 +127,7 @@ export async function fetchPost (gallery: string, post: number | string) {
 
   // 미리보기 대기 중 클래스 삭제하기
   element?.classList.remove('ks-loading')
-  
+
   return content
 }
 
@@ -136,7 +136,7 @@ export async function fetchPost (gallery: string, post: number | string) {
  * @param gallery 갤러리 아이디
  * @param posts 게시글 번호들
  */
-export async function fetchPosts (gallery: string, posts: (number|string)[]) {
+export async function fetchPosts(gallery: string, posts: (number | string)[]) {
   const promises = []
   const limit = pLimit(Config.get<number>('live.thread'))
 
@@ -157,19 +157,62 @@ export async function fetchPosts (gallery: string, posts: (number|string)[]) {
   await Promise.all(promises)
 }
 
+interface TemplateArgs {
+  no: number;
+}
+
+/**
+ * HTML 변환 템플릿
+ */
+export async function template({ no }: TemplateArgs) {
+  return `
+  <tr class="ub-content us-post" data-no="${no}" data-type="icon_pic">
+    <td class="gall_num">${no}</td>
+    <td class="gall_subject"></td>
+    <td class="gall_tit ub-word">
+    <a href="/mgallery/board/view/?id=girlcafe&no=132943&_rk=Zxh&page=1"><em class="icon_img icon_pic"></em>내가했던 게임갤은 이벤트좆같으면 다같이좆같다고 욕했는데</a>
+    <a class="reply_numbox" href="https://gall.dcinside.com/mgallery/board/view/?id=girlcafe&no=132943&t=cv&page=1&_rk=rrh"><span class="reply_num">[6]</span></a>			  </td>
+    <td class="gall_writer ub-writer" data-nick="ㅇㅇ" data-uid="" data-ip="223.39" data-loc="list">
+    <span class='nickname' title='ㅇㅇ'><em>ㅇㅇ</em></span><span class="ip">(223.39)</span>							  </td>
+    <td class="gall_date" title="2020-08-02 10:37:12">10:37</td>
+    <td class="gall_count">86</td>
+    <td class="gall_recommend">1</td>
+  </tr>
+`;
+}
+
+ 
 /**
  * 게시글 목록을 불러온 뒤 처리합니다
  * @param gallery 갤러리 아이디
  * @param html 이미 처리된 HTML 코드
  */
-export async function fetchList (gallery: string) {
+export async function fetchList(gallery: string) {
+  const rep = await request({
+    method: 'POST',
+    url: 'https://m.dcinside.com/ajax/response-list',
+    data: `id=${gallery}&page=1`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Referer': `https://m.dcinside.com/board/${gallery}?page=1`,
+      'Origin': 'https://m.dcinside.com'
+
+    },
+  });
+
+  const json = rep.responseJSON;
+  console.log(json);
+
   const res = await request({
     url: location.href,
     timeout: 5000
   })
 
+  console.log('location.href', location.href);
+
   // body 태그만 가져오기
   const matches = res.responseText.match(bodyPattern)
+  console.log(bodyPattern);
   if (!matches) {
     throw new Error('server returned invalid response')
   }
@@ -184,6 +227,8 @@ export async function fetchList (gallery: string) {
     if (fetchedPost.querySelector('.icon_notice, .icon_survey')) {
       continue
     }
+
+    console.log('fetchedPost', fetchedPost);
 
     // 보기 페이지에서 현재 글은 따로 표시되므로 제외하기
     if (fetchedPost.matches('.crt')) {
@@ -218,7 +263,7 @@ export async function fetchList (gallery: string) {
         fetchedPost.prepend(checkboxTemplate.cloneNode(true))
       }
     }
-    
+
     if (!cache.has(gallery, fetched)) {
       // 아예 존재하지 않는다면 테이블에 추가하기
       fetchedPost.classList.add('ks-update')
