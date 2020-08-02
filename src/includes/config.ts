@@ -106,6 +106,18 @@ configuration.preview = {
   }
 }
 
+// 팝업 설정
+configuration.popup = {
+  name: '간편 팝업',
+  items: {
+    enabled: {
+      name :'활성화',
+      description: '팝업 기능을 활성화합니다',
+      default: true
+    }
+  }
+}
+
 // 우 클릭 메뉴 설정
 configuration.context = {
   name: '메뉴',

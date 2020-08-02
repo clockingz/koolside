@@ -303,6 +303,116 @@ const template =  /* less */`
     }
   }
 
+  #ks-popup {
+    transition: opacity @animation-speed;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    cursor: pointer;
+
+    #ks-popup-iframe {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    > div {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 80%;
+      height: 80%;
+      border-radius: 5px;
+      background: white;
+      box-shadow: 0 0 100% black;
+      color: white;
+      cursor: initial;
+    }
+
+    summary {
+      display: block;
+      padding: .5em;
+      font-weight: bold;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+
+    .ks-popup-item {
+      box-sizing: border-box;
+      padding: .5em;
+      padding-left: 1.5em;
+      
+      &:nth-child(even) {
+        background: rgba(0, 0, 0, .15);
+      }
+    }
+
+    .ks-popup-key {
+      display: block;
+      width: 100%;
+
+      label {
+        float: left;
+        display: inline-block;
+        width: 50%;
+        cursor: pointer;
+      }
+
+      > input, textarea {
+        float: right;
+        display: inline-block;
+        margin: 0;
+        width: 50%;
+        border: 0;
+        box-sizing: border-box;
+        background: lighten(@color-primary, 5%);
+        font-family: @font-monospace;
+      }
+      > textarea {
+        min-height: 100px;
+        resize: vertical;
+
+        &::placeholder {
+          color: darken(@color-primary, 5%);
+        }
+      }
+
+      .ks-clearfix();
+    }
+
+    .ks-popup-buttons {
+      padding: 1em;
+      padding-bottom: 0;
+
+      button {
+        display: inline-block;
+        padding: .5em;
+        background: darken(@color-primary, 35%);
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+      }
+    }
+    
+    &.ks-active {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
   #ks-preview {
     transition: opacity @animation-speed;
     transform-origin: top left; 

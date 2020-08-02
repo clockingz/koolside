@@ -12,7 +12,8 @@
     "outDir": "dist",
     "esModuleInterop": true,
     "noImplicitAny": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*"

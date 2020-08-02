@@ -8,14 +8,14 @@ module.exports = (env, argv) => {
   const metadata = stripIndent`
   // ==UserScript==
   // @name          koolside
-  // @namespace     https://github.com/toriato/koolside
-  // @supportURL    https://github.com/toriato/koolside/issues
-  // @homepageURL   https://github.com/toriato/koolside
-  // @downloadURL   https://github.com/toriato/koolside/releases/latest/download/koolside.user.js"
+  // @namespace     https://github.com/sokcuri/koolside
+  // @supportURL    https://github.com/sokcuri/koolside/issues
+  // @homepageURL   https://github.com/sokcuri/koolside
+  // @downloadURL   https://github.com/sokcuri/koolside/releases/latest/download/koolside.user.js"
   // @version       ${package.version}
   // @author        ${package.author}
   // @description   ${package.description}
-  // @license       MIT; https://github.com/toriato/koolside/blob/master/LICENSE
+  // @license       MIT; https://github.com/sokcuri/koolside/blob/master/LICENSE
   // @include       https://*.dcinside.com/*
   // @require       https://cdnjs.cloudflare.com/ajax/libs/less.js/3.10.3/less.min.js
   // @grant         GM_getValue

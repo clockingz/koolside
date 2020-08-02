@@ -1,9 +1,11 @@
 import componentContext from './components/context'
+import componentPopup from './components/popup'
 import componentPreview from './components/preview'
 import componentTooltip from './components/tooltip'
 import cache from './includes/cache'
 import Config from './includes/config'
-import { fetchList, fetchPosts } from './includes/request'
+import IpData from './includes/ipData'
+import request, { fetchList, fetchPosts } from './includes/request'
 import { getParameter, promiseSeries, wait } from './includes/utils'
 
 // @ts-ignore FUCK YOU VSCODE
@@ -11,8 +13,10 @@ await new Promise(resolve => window.addEventListener('load', resolve))
 
 if (window.top === window.self) {
   Config.load()
+  IpData.load();
   
   // 앱에서 사용할 요소와 스타일 시트 추가하기
+  componentPopup.create()
   componentContext.create()
   componentTooltip.create()
   componentPreview.create()
@@ -39,6 +43,19 @@ if (window.top === window.self) {
   
     // 현재 페이지의 게시글 목록 초기화하기
     // @ts-ignore
+
+    const res = await request({
+      url: `https://m.dcinside.com/board/${gallery}`,
+      timeout: 5000,
+      headers: {
+        'user-agent': 'Mozilla/5.0 (Android 7.0; Mobile)'
+      }
+    })
+    
+    if (res.responseText.indexOf('penalty-box') !== -1) {
+      throw new Error('접근제한 갤러리');
+    }
+
     await fetchPosts(gallery, fetching).catch(console.error)
   
     while (true) {
